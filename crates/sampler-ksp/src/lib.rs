@@ -1205,7 +1205,13 @@ fn initialize_inner(
         };
         #[cfg(feature = "scan")]
         scan::stage("sema");
-        let hir = sema::analyze(ast, &syms, budget, &environment.performance_view.controls)?;
+        let hir = sema::analyze(
+            ast,
+            &syms,
+            budget,
+            &environment.performance_view.controls,
+            environment.num_groups(),
+        )?;
         if std::env::var_os("KONTRA_AUDIT_LOAD").is_some() {
             eprintln!(
                 "AUDIT {{\"stage\":\"ksp_frontend\",\"ms\":{}}}",

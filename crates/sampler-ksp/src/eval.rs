@@ -60,6 +60,13 @@ pub struct Environment {
     pub transport: Option<Transport>,
 }
 
+impl Environment {
+    /// `$NUM_GROUPS` before analysis, when the instrument's groups are known.
+    pub(crate) fn num_groups(&self) -> Option<i32> {
+        (!self.groups.is_empty()).then(|| self.groups.len() as i32)
+    }
+}
+
 /// Host-provided transport values, in the units of the matching KSP variables.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Transport {

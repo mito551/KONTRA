@@ -312,6 +312,7 @@ mod tests {
                 array_cells: crate::Limits::LIBRARY.array_cells,
             },
             &[],
+            None,
         )
         .unwrap()
     }

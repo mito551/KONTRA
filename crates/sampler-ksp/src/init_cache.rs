@@ -439,6 +439,7 @@ pub fn restore_initialized(
             array_cells: limits.array_cells,
         },
         &cached.performance_view.controls,
+        (!cached.groups.is_empty()).then(|| cached.groups.len() as i32),
     )
     .map_err(|f| f.locate(source))?;
     if std::env::var_os("KONTRA_AUDIT_LOAD").is_some() {

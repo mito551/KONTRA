@@ -1401,3 +1401,27 @@ fn real_sgn_note_reuses_full_operand_bits_and_preserves_comparison_policy() {
         });
     }
 }
+
+#[test]
+fn a_declaration_range_can_use_the_instruments_group_count() {
+    let environment = sampler_ksp::Environment {
+        groups: vec!["a".into(), "b".into(), "c".into()],
+        ..Default::default()
+    };
+    let script = sampler_ksp::compile_with(
+        "on init declare ui_value_edit $shift (-($NUM_GROUPS-1),$NUM_GROUPS-1,1) end on",
+        48000,
+        limits(),
+        &[],
+        &environment,
+    )
+    .unwrap();
+    let view = script.view();
+    let setup = view.setup();
+    let field = setup.fields.iter().find(|f| f.name == "$shift").unwrap();
+    let sampler_ksp::model::Location::Control(id) = field.storage else {
+        panic!("{:?}", field.storage)
+    };
+    let domain = setup.control_domains.iter().find(|(c, _)| *c == id).unwrap().1;
+    assert_eq!(domain, sampler_core::ControlDomain::Integer { min: -2, max: 2 });
+}

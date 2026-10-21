@@ -39,10 +39,14 @@ pub fn analyze<'a, 's>(
     syms: &'s Interner<'a>,
     budget: Budget,
     performance_view: &'s [PerformanceControl],
+    num_groups: Option<i32>,
 ) -> Result<Hir> {
     let mut s = Sema {
         syms,
-        hir: Hir::default(),
+        hir: Hir {
+            num_groups,
+            ..Hir::default()
+        },
         names: HashMap::new(),
         folded: HashMap::new(),
         functions: HashMap::new(),
@@ -1311,6 +1315,7 @@ pub fn fold(hir: &Hir, e: &Expr) -> Option<Const> {
         ExprKind::Int(n) => Int(*n),
         ExprKind::Real(n) => Real(*n),
         ExprKind::Str(s) => Str(s.clone()),
+        ExprKind::Sys(builtins::SysVar::NumGroups) => Int(hir.num_groups?),
         ExprKind::Neg(inner) => match fold(hir, inner)? {
             Int(n) => Int(n.wrapping_neg()),
             Real(n) => Real(-n),

@@ -309,6 +309,7 @@ fn parity_report_with_detail(
                 array_cells: limits.array_cells,
             },
             &environment.performance_view.controls,
+            environment.num_groups(),
         )
     })();
     let hir = match frontend {

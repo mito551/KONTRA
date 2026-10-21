@@ -308,6 +308,9 @@ pub struct Hir {
     pub warnings: Vec<crate::diag::Fault>,
     /// Longest static `call` chain, for the VM's bounded frame stack.
     pub call_depth: usize,
+    /// The instrument's group count when known before analysis: `$NUM_GROUPS`
+    /// then folds, so declarations can size controls with it as in Kontakt.
+    pub num_groups: Option<i32>,
 }
 
 /// Values of opaque vendor symbols not in `builtins::CONTROL_PARS`.
